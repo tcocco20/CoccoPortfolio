@@ -1,0 +1,71 @@
+.star {
+  border-radius: 50%;
+  box-shadow: 0 0 5px var(--col1s), 0 0 10px var(--col2s);
+  position: absolute;
+  filter: brightness(1.5);
+  opacity: 0.4;
+  transition: opacity 1s ease-in, transform 0.7s ease-in-out;
+}
+
+.star.shooting {
+  transition: none;
+  height: 8px;
+  width: 8px;
+  top: 50%;
+  left: 50%;
+  background-color: var(--col1s);
+}
+
+.star.shooting::before {
+  content: "";
+  height: 8px;
+  width: 100px;
+  position: absolute;
+  top: 0;
+  right: 50%;
+  clip-path: polygon(0 35%, 100% 0, 100% 100%, 0 65%);
+  background-image: linear-gradient(to right, #0000, var(--col1s));
+}
+
+.star.falling1 {
+  top: calc(200vh - 50px) !important;
+  opacity: 0 !important;
+  transition: all 2s ease, opacity 4s ease !important;
+}
+
+.star.falling2 {
+  top: calc(200vh - 50px) !important;
+  opacity: 0 !important;
+  transition: all 2.5s ease, opacity 4.5s ease !important;
+}
+
+.star.falling3 {
+  top: calc(200vh - 50px) !important;
+  opacity: 0 !important;
+  transition: all 3s ease, opacity 5s ease !important;
+}
+
+.star.falling4 {
+  top: calc(200vh - 50px) !important;
+  opacity: 0 !important;
+  transition: all 3.5s ease, opacity 5.5s ease !important;
+}
+
+.star.falling5 {
+  top: calc(200vh - 50px) !important;
+  opacity: 0 !important;
+  transition: all 4s ease, opacity 6s ease !important;
+}
+
+.star.highlight {
+  opacity: 1;
+  filter: brightness(2);
+  text-shadow: 0 0 5px var(--col1s), 0 0 10px var(--col2s),
+    -5px 5px 5px var(--col4s), -5px 5px 10px var(--col4s),
+    1px -1px 2px var(--col1), 1px -1px 2px var(--col1), 1px -1px 5px var(--col1),
+    0 0 40px var(--col1), 0 0 40px var(--col1), 0 0 60px var(--col1);
+}
+
+.star.trans {
+  transition: all 1s ease !important;
+}

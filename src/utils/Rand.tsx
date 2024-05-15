@@ -6,7 +6,7 @@ export const Rand = {
     else if (round) num = Math.floor(num);
     return num;
   },
-  choice<T>(...options: T[]) {
+  choice<T>(...options: T[]): T {
     options = options.flat() as T[];
     return options[Math.floor(Math.random() * options.length)];
   },

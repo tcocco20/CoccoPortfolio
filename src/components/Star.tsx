@@ -11,11 +11,12 @@ const colors = ["#F6F0FE", "#DFABCA", "#E9C1D4"];
 const Star = ({ size }: StarProps) => {
   const [highlight, setHighlight] = useState(false);
   const [scale, setScale] = useState(1);
+  const [smallSize, setSmallSize] = useState(0);
+  const [largeSize, setLargeSize] = useState(0);
   const [starSize, setStarSize] = useState(0);
+  const [transition, setTransition] = useState(false);
   const [top, setTop] = useState("");
   const [left, setLeft] = useState("");
-
-  const largeSize = 5 + 0.58 * starSize;
 
   const flicker = useCallback(() => {
     if (!highlight) {
@@ -30,6 +31,8 @@ const Star = ({ size }: StarProps) => {
     let sSize = Utils.Rand.between(3, 1);
     if (size === "medium") sSize += 1.5;
     if (size === "large") sSize += 3;
+    setSmallSize(sSize);
+    setLargeSize(5 + 0.58 * sSize);
     setStarSize(sSize);
 
     setTop(Utils.Rand.between(101, 0, true) + "%");
@@ -41,9 +44,14 @@ const Star = ({ size }: StarProps) => {
     return () => clearInterval(timer);
   }, [flicker]);
 
-  const style = {
+  const wrapperStyle = {
     top,
     left,
+    height: innerWidth / 18,
+    width: innerWidth / 18,
+  } as CSSProperties;
+
+  const starInitialStyle = {
     opacity: 0,
     height: starSize,
     width: starSize,
@@ -51,11 +59,38 @@ const Star = ({ size }: StarProps) => {
     transform: `scale(${scale})`,
   } as CSSProperties;
 
+  const onHover = () => {
+    if (!highlight) {
+      setScale(1);
+      setHighlight(true);
+      setStarSize(largeSize);
+    }
+  };
+
+  const onLeave = () => {
+    if (highlight) {
+      setTransition(true);
+      setHighlight(false);
+      setStarSize(smallSize);
+
+      setTimeout(() => setTransition(false), 1000);
+    }
+  };
+
   return (
-    <div>
+    <div
+      className={classes.wrapper}
+      style={wrapperStyle}
+      onMouseEnter={onHover}
+      onMouseLeave={onLeave}
+    >
       <div
-        style={style}
-        className={(classes.star, highlight ? classes.highlight : "")}
+        style={starInitialStyle}
+        className={
+          (classes.star,
+          highlight ? classes.highlight : "",
+          transition ? classes.trans : "")
+        }
       />
     </div>
   );

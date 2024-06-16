@@ -1,5 +1,5 @@
 const StarLayer = () => {
-  return <div>StarLayer</div>;
+  return <div></div>;
 };
 
 export default StarLayer;

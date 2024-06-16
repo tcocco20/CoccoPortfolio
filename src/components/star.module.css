@@ -1,7 +1,10 @@
+.wrapper {
+  position: absolute;
+}
+
 .star {
   border-radius: 50%;
   box-shadow: 0 0 5px var(--col1s), 0 0 10px var(--col2s);
-  position: absolute;
   filter: brightness(1.5);
   opacity: 0.4;
   transition: opacity 1s ease-in, transform 0.7s ease-in-out;

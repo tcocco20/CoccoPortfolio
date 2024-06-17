@@ -14,8 +14,8 @@ const Star = ({ size }: StarProps) => {
   const [smallSize, setSmallSize] = useState(0);
   const [largeSize, setLargeSize] = useState(0);
   const [starSize, setStarSize] = useState(0);
-  const [opacity, setOpacity] = useState(0);
   const [transition, setTransition] = useState(false);
+  const [appear, setAppear] = useState(false);
   const [top, setTop] = useState("");
   const [left, setLeft] = useState("");
 
@@ -28,11 +28,6 @@ const Star = ({ size }: StarProps) => {
     }
   }, [highlight, scale]);
 
-  const starAppear = useCallback(() => {
-    setOpacity((state) => state + 0.02);
-    if (opacity < 0.4) requestAnimationFrame(starAppear);
-  }, [opacity]);
-
   useEffect(() => {
     let sSize = Utils.Rand.between(3, 1);
     if (size === "medium") sSize += 1.5;
@@ -43,16 +38,14 @@ const Star = ({ size }: StarProps) => {
 
     setTop(Utils.Rand.between(101, 0, true) + "%");
     setLeft(Utils.Rand.between(101, 0, true) + "%");
+
+    setAppear(true);
   }, [size]);
 
   useEffect(() => {
     const timer = setInterval(flicker, Utils.Rand.between(700, 500));
     return () => clearInterval(timer);
   }, [flicker]);
-
-  useEffect(() => {
-    requestAnimationFrame(starAppear);
-  }, [starAppear]);
 
   const wrapperStyle = {
     top,
@@ -62,7 +55,7 @@ const Star = ({ size }: StarProps) => {
   } as CSSProperties;
 
   const starInitialStyle = {
-    opacity,
+    opacity: 0,
     height: starSize,
     width: starSize,
     backgroundColor: Utils.Rand.choice<string | string[]>(colors),
@@ -99,7 +92,8 @@ const Star = ({ size }: StarProps) => {
         className={
           (classes.star,
           highlight ? classes.highlight : "",
-          transition ? classes.trans : "")
+          transition ? classes.trans : "",
+          appear ? classes.appear : "")
         }
       />
     </div>

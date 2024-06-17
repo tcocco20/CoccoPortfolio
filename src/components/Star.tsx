@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, type CSSProperties } from "react";
 import Utils from "../utils";
-import classes from "./Star.module.css";
+import classes from "./star.module.css";
 
 interface StarProps {
   size: "small" | "medium" | "large";
@@ -14,6 +14,7 @@ const Star = ({ size }: StarProps) => {
   const [smallSize, setSmallSize] = useState(0);
   const [largeSize, setLargeSize] = useState(0);
   const [starSize, setStarSize] = useState(0);
+  const [opacity, setOpacity] = useState(0);
   const [transition, setTransition] = useState(false);
   const [top, setTop] = useState("");
   const [left, setLeft] = useState("");
@@ -26,6 +27,11 @@ const Star = ({ size }: StarProps) => {
       }
     }
   }, [highlight, scale]);
+
+  const starAppear = useCallback(() => {
+    setOpacity((state) => state + 0.02);
+    if (opacity < 0.4) requestAnimationFrame(starAppear);
+  }, [opacity]);
 
   useEffect(() => {
     let sSize = Utils.Rand.between(3, 1);
@@ -44,6 +50,10 @@ const Star = ({ size }: StarProps) => {
     return () => clearInterval(timer);
   }, [flicker]);
 
+  useEffect(() => {
+    requestAnimationFrame(starAppear);
+  }, [starAppear]);
+
   const wrapperStyle = {
     top,
     left,
@@ -52,7 +62,7 @@ const Star = ({ size }: StarProps) => {
   } as CSSProperties;
 
   const starInitialStyle = {
-    opacity: 0,
+    opacity,
     height: starSize,
     width: starSize,
     backgroundColor: Utils.Rand.choice<string | string[]>(colors),
@@ -81,8 +91,8 @@ const Star = ({ size }: StarProps) => {
     <div
       className={classes.wrapper}
       style={wrapperStyle}
-      onMouseEnter={onHover}
-      onMouseLeave={onLeave}
+      onMouseEnter={size === "large" ? onHover : undefined}
+      onMouseLeave={size === "large" ? onLeave : undefined}
     >
       <div
         style={starInitialStyle}

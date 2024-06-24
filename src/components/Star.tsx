@@ -47,14 +47,9 @@ const Star = ({ size }: StarProps) => {
     return () => clearInterval(timer);
   }, [flicker]);
 
-  const wrapperStyle = {
+  const starInitialStyle = {
     top,
     left,
-    height: innerWidth / 18,
-    width: innerWidth / 18,
-  } as CSSProperties;
-
-  const starInitialStyle = {
     opacity: 0,
     height: starSize,
     width: starSize,
@@ -82,18 +77,11 @@ const Star = ({ size }: StarProps) => {
 
   return (
     <div
-      className={classes.wrapper}
-      style={wrapperStyle}
-      onMouseOver={size === "large" ? onHover : undefined}
-      onMouseLeave={size === "large" ? onLeave : undefined}
-    >
-      <div
-        style={starInitialStyle}
-        className={`${classes.star}${highlight ? " " + classes.highlight : ""}${
-          transition ? " " + classes.trans : ""
-        }${appear ? " " + classes.appear : ""}`}
-      />
-    </div>
+      style={starInitialStyle}
+      className={`${classes.star}${highlight ? " " + classes.highlight : ""}${
+        transition ? " " + classes.trans : ""
+      }${appear ? " " + classes.appear : ""}`}
+    />
   );
 };
 

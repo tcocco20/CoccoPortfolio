@@ -84,17 +84,14 @@ const Star = ({ size }: StarProps) => {
     <div
       className={classes.wrapper}
       style={wrapperStyle}
-      onMouseEnter={size === "large" ? onHover : undefined}
+      onMouseOver={size === "large" ? onHover : undefined}
       onMouseLeave={size === "large" ? onLeave : undefined}
     >
       <div
         style={starInitialStyle}
-        className={
-          (classes.star,
-          highlight ? classes.highlight : "",
-          transition ? classes.trans : "",
-          appear ? classes.appear : "")
-        }
+        className={`${classes.star}${highlight ? " " + classes.highlight : ""}${
+          transition ? " " + classes.trans : ""
+        }${appear ? " " + classes.appear : ""}`}
       />
     </div>
   );

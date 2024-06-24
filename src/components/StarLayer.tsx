@@ -9,13 +9,13 @@ const StarLayer = ({ position }: StarLayerProps) => {
     const stars = [];
     if (position === "front") {
       for (let i = 0; i < innerWidth / 30; i++)
-        stars.push(<Star size="large" />);
+        stars.push(<Star key={`large ${i}`} size="large" />);
     } else if (position === "middle") {
       for (let i = 0; i < innerWidth / 15; i++)
-        stars.push(<Star size="medium" />);
+        stars.push(<Star key={`medium ${i}`} size="medium" />);
     } else {
       for (let i = 0; i < innerWidth / 5; i++)
-        stars.push(<Star size="small" />);
+        stars.push(<Star key={`small ${i}`} size="small" />);
     }
 
     return stars;

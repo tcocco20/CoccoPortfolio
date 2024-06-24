@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useState, type CSSProperties } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import Utils from "../utils";
 import classes from "./star.module.css";
 
@@ -18,6 +24,7 @@ const Star = ({ size }: StarProps) => {
   const [appear, setAppear] = useState(false);
   const [top, setTop] = useState("");
   const [left, setLeft] = useState("");
+  const star = useRef<HTMLDivElement>(null);
 
   const flicker = useCallback(() => {
     if (!highlight) {
@@ -27,6 +34,28 @@ const Star = ({ size }: StarProps) => {
       }
     }
   }, [highlight, scale]);
+
+  const lightStar = useCallback(
+    (e: MouseEvent) => {
+      if (size === "large") {
+        const distance = Utils.calcDistance(star.current!, e);
+        if (distance < innerWidth / 18) {
+          if (!highlight) {
+            setScale(1);
+            setHighlight(true);
+            setStarSize(largeSize);
+          }
+        } else {
+          setTransition(true);
+          setHighlight(false);
+          setStarSize(smallSize);
+
+          setTimeout(() => setTransition(false), 1000);
+        }
+      }
+    },
+    [highlight, largeSize, smallSize, size]
+  );
 
   useEffect(() => {
     let sSize = Utils.Rand.between(3, 1);
@@ -57,26 +86,9 @@ const Star = ({ size }: StarProps) => {
     transform: `scale(${scale})`,
   } as CSSProperties;
 
-  const onHover = () => {
-    if (!highlight) {
-      setScale(1);
-      setHighlight(true);
-      setStarSize(largeSize);
-    }
-  };
-
-  const onLeave = () => {
-    if (highlight) {
-      setTransition(true);
-      setHighlight(false);
-      setStarSize(smallSize);
-
-      setTimeout(() => setTransition(false), 1000);
-    }
-  };
-
   return (
     <div
+      ref={star}
       style={starInitialStyle}
       className={`${classes.star}${highlight ? " " + classes.highlight : ""}${
         transition ? " " + classes.trans : ""

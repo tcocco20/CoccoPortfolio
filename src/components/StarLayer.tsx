@@ -17,6 +17,7 @@ const StarLayer = ({ position }: StarLayerProps) => {
       for (let i = 0; i < innerWidth / 5; i++)
         stars.push(<Star key={`small ${i}`} size="small" />);
     }
+
     return stars;
   };
 

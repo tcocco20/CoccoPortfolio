@@ -17,11 +17,14 @@ const StarLayer = ({ position }: StarLayerProps) => {
       for (let i = 0; i < innerWidth / 5; i++)
         stars.push(<Star key={`small ${i}`} size="small" />);
     }
-
     return stars;
   };
 
-  return <section>{generateStars()}</section>;
+  return (
+    <section className="h-screen w-screen absolute top-0 left-0 pointer-events-none z-50">
+      {generateStars()}
+    </section>
+  );
 };
 
 export default StarLayer;

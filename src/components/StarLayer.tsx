@@ -1,15 +1,24 @@
+import { useEffect } from "react";
 import Star from "./Star";
+import useAppStore from "../store/appStore";
 
 interface StarLayerProps {
   position: "front" | "middle" | "back";
 }
 
 const StarLayer = ({ position }: StarLayerProps) => {
+  const stars = useAppStore((state) => state.starRefs);
+  useEffect(() => {
+    if (position === "front") {
+      console.log(stars);
+    }
+  }, [position, stars]);
+
   const generateStars = () => {
     const stars = [];
     if (position === "front") {
       for (let i = 0; i < innerWidth / 30; i++)
-        stars.push(<Star key={`large ${i}`} size="large" />);
+        stars.push(<Star lightStar={false} key={`large ${i}`} size="large" />);
     } else if (position === "middle") {
       for (let i = 0; i < innerWidth / 15; i++)
         stars.push(<Star key={`medium ${i}`} size="medium" />);

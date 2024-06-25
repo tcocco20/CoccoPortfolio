@@ -1,13 +1,18 @@
 import { create } from "zustand";
 
 interface appState {
-  bears: number;
-  increase: (by: number) => void;
+  starRefs: HTMLDivElement[];
+  addStar: (star: HTMLDivElement) => void;
 }
 
-const useAppStore = create<appState>()((set) => ({
-  bears: 0,
-  increase: (by) => set((state) => ({ bears: state.bears + by })),
+const useAppStore = create<appState>()((set, get) => ({
+  starRefs: [],
+  addStar: (star) =>
+    set(() => {
+      const currentStars = get().starRefs;
+      currentStars.push(star);
+      return { starRefs: currentStars };
+    }),
 }));
 
 export default useAppStore;

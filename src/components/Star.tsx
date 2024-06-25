@@ -1,20 +1,22 @@
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  type CSSProperties,
-} from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import Utils from "../utils";
 import classes from "./star.module.css";
+import useAppStore from "../store/appStore";
 
-interface StarProps {
-  size: "small" | "medium" | "large";
+interface LargeStarProps {
+  size: "large";
+  lightStar: boolean;
 }
+
+interface SmallerStarProps {
+  size: "small" | "medium";
+}
+
+type StarProps = LargeStarProps | SmallerStarProps;
 
 const colors = ["#F6F0FE", "#DFABCA", "#E9C1D4"];
 
-const Star = ({ size }: StarProps) => {
+const Star = (props: StarProps) => {
   const [highlight, setHighlight] = useState(false);
   const [scale, setScale] = useState(1);
   const [smallSize, setSmallSize] = useState(0);
@@ -26,41 +28,41 @@ const Star = ({ size }: StarProps) => {
   const [left, setLeft] = useState("");
   const star = useRef<HTMLDivElement>(null);
 
-  const flicker = useCallback(() => {
+  const addStar = useAppStore((state) => state.addStar);
+
+  const flicker = () => {
     if (!highlight) {
       if (Utils.Rand.num() > 0.5) {
         if (scale > 0.5) setScale(Utils.Rand.between(0.5));
         else setScale(Utils.Rand.between(1, 0.5));
       }
     }
-  }, [highlight, scale]);
+  };
 
-  const lightStar = useCallback(
-    (e: MouseEvent) => {
-      if (size === "large") {
-        const distance = Utils.calcDistance(star.current!, e);
-        if (distance < innerWidth / 18) {
-          if (!highlight) {
-            setScale(1);
-            setHighlight(true);
-            setStarSize(largeSize);
-          }
-        } else {
-          setTransition(true);
-          setHighlight(false);
-          setStarSize(smallSize);
-
-          setTimeout(() => setTransition(false), 1000);
-        }
+  const lightStarHandler = () => {
+    const distance = Utils.calcDistance(star.current!, e);
+    if (distance < innerWidth / 18) {
+      if (!highlight) {
+        setScale(1);
+        setHighlight(true);
+        setStarSize(largeSize);
       }
-    },
-    [highlight, largeSize, smallSize, size]
-  );
+    } else {
+      setTransition(true);
+      setHighlight(false);
+      setStarSize(smallSize);
+
+      setTimeout(() => setTransition(false), 1000);
+    }
+  };
 
   useEffect(() => {
     let sSize = Utils.Rand.between(3, 1);
-    if (size === "medium") sSize += 1.5;
-    if (size === "large") sSize += 3;
+    if (props.size === "medium") sSize += 1.5;
+    if (props.size === "large") {
+      sSize += 3;
+      if (star.current) addStar(star.current);
+    }
     setSmallSize(sSize);
     setLargeSize(5 + 0.58 * sSize);
     setStarSize(sSize);
@@ -69,12 +71,18 @@ const Star = ({ size }: StarProps) => {
     setLeft(Utils.Rand.between(101, 0, true) + "%");
 
     setAppear(true);
-  }, [size]);
+  }, [props.size, addStar]);
 
   useEffect(() => {
     const timer = setInterval(flicker, Utils.Rand.between(700, 500));
     return () => clearInterval(timer);
-  }, [flicker]);
+  }, []);
+
+  useEffect(() => {
+    if (props.size === "large") {
+      if (props.lightStar) lightStarHandler(e);
+    }
+  }, []);
 
   const starInitialStyle = {
     top,

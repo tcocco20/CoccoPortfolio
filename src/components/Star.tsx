@@ -1,11 +1,15 @@
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import Utils from "../utils";
 import classes from "./star.module.css";
-import useAppStore from "../store/appStore";
 
 interface LargeStarProps {
   size: "large";
-  lightStar: boolean;
 }
 
 interface SmallerStarProps {
@@ -16,8 +20,7 @@ type StarProps = LargeStarProps | SmallerStarProps;
 
 const colors = ["#F6F0FE", "#DFABCA", "#E9C1D4"];
 
-const Star = (props: StarProps) => {
-  const [highlight, setHighlight] = useState(false);
+const Star = forwardRef<HTMLDivElement, StarProps>(({ size }, ref) => {
   const [scale, setScale] = useState(1);
   const [smallSize, setSmallSize] = useState(0);
   const [largeSize, setLargeSize] = useState(0);
@@ -27,8 +30,6 @@ const Star = (props: StarProps) => {
   const [top, setTop] = useState("");
   const [left, setLeft] = useState("");
   const star = useRef<HTMLDivElement>(null);
-
-  const addStar = useAppStore((state) => state.addStar);
 
   const flicker = () => {
     if (!highlight) {
@@ -58,11 +59,8 @@ const Star = (props: StarProps) => {
 
   useEffect(() => {
     let sSize = Utils.Rand.between(3, 1);
-    if (props.size === "medium") sSize += 1.5;
-    if (props.size === "large") {
-      sSize += 3;
-      if (star.current) addStar(star.current);
-    }
+    if (size === "medium") sSize += 1.5;
+    if (size === "large") sSize += 3;
     setSmallSize(sSize);
     setLargeSize(5 + 0.58 * sSize);
     setStarSize(sSize);
@@ -71,7 +69,7 @@ const Star = (props: StarProps) => {
     setLeft(Utils.Rand.between(101, 0, true) + "%");
 
     setAppear(true);
-  }, [props.size, addStar]);
+  }, [size]);
 
   useEffect(() => {
     const timer = setInterval(flicker, Utils.Rand.between(700, 500));
@@ -79,8 +77,8 @@ const Star = (props: StarProps) => {
   }, []);
 
   useEffect(() => {
-    if (props.size === "large") {
-      if (props.lightStar) lightStarHandler(e);
+    if (size === "large") {
+      if (lightStar) lightStarHandler(e);
     }
   }, []);
 
@@ -103,6 +101,6 @@ const Star = (props: StarProps) => {
       }${appear ? " " + classes.appear : ""}`}
     />
   );
-};
+});
 
 export default Star;

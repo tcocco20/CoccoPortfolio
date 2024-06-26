@@ -1,9 +1,10 @@
+import { StarInterface } from "../components/Star";
 import { RefObject } from "react";
 import { create } from "zustand";
 
 interface appState {
-  starRefs: RefObject<HTMLDivElement>[];
-  addStar: (star: RefObject<HTMLDivElement>) => void;
+  starRefs: RefObject<StarInterface>[];
+  addStar: (star: RefObject<StarInterface>) => void;
 }
 
 const useAppStore = create<appState>()((set, get) => ({

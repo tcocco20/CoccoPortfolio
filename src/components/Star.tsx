@@ -38,6 +38,7 @@ const Star = forwardRef<StarInterface, StarProps>(({ size }, ref) => {
   const [appear, setAppear] = useState(false);
   const [top, setTop] = useState("");
   const [left, setLeft] = useState("");
+  const color = useRef<string>(Utils.Rand.choice(colors));
   const star = useRef<HTMLDivElement>(null);
 
   useImperativeHandle(ref, () => {
@@ -68,7 +69,7 @@ const Star = forwardRef<StarInterface, StarProps>(({ size }, ref) => {
         else setScale(Utils.Rand.between(1, 0.5));
       }
     }
-  }, []);
+  }, [highlight, scale]);
 
   useEffect(() => {
     let sSize = Utils.Rand.between(3, 1);
@@ -95,7 +96,7 @@ const Star = forwardRef<StarInterface, StarProps>(({ size }, ref) => {
     opacity: 0,
     height: starSize,
     width: starSize,
-    backgroundColor: Utils.Rand.choice<string | string[]>(colors),
+    backgroundColor: color.current,
     transform: `scale(${scale})`,
   } as CSSProperties;
 

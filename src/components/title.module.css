@@ -6,24 +6,15 @@
   text-shadow: 0 0 5px #f6f0fe, 0 0 10px #dfabca;
   opacity: 0.5;
   transition: opacity 1s ease;
+  pointer-events: none;
 }
 
 .title span {
   transition: all 1.5s ease;
 }
 
-.title span.highlight {
-  transition: none;
-  text-shadow: 0 0 5px var(#f6f0fe), 0 0 10px #dfabca, -5px 5px 5px var(--col4s),
-    -5px 5px 10px var(--col4s), 1px -1px 2px var(--col1),
-    1px -1px 2px var(--col1), 1px -1px 5px var(--col1), 0 0 40px var(--col1),
-    0 0 40px var(--col1), 0 0 60px var(--col1);
-  filter: brightness(1.5);
-}
-
 .name {
   opacity: 0;
-  color: var(--col3sa);
   font-size: 5vw;
   animation-name: slideDown;
   animation-duration: 1s;
@@ -33,7 +24,6 @@
 
 .subtitle {
   opacity: 0;
-  color: var(--col3sa);
   font-size: 3.5vw;
   animation-name: slideUp;
   animation-duration: 1s;

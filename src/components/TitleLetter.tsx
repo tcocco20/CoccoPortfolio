@@ -4,7 +4,9 @@ interface TitleLetterProps {
 }
 
 const TitleLetter = ({ char, highlight }: TitleLetterProps) => {
-  return <span className={highlight ? "highlight" : ""}>{char}</span>;
+  return (
+    <span className={highlight ? "letter highlight" : "letter"}>{char}</span>
+  );
 };
 
 export default TitleLetter;

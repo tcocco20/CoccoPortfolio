@@ -1,14 +1,22 @@
 import TitleLetter from "./TitleLetter";
+import classes from "./title.module.css";
 
 interface SubtitleProps {
   text: string;
+  typeOfSubtitle: "name" | "subtitle";
 }
 
-const Subtitle = ({ text }: SubtitleProps) => {
+const Subtitle = ({ text, typeOfSubtitle }: SubtitleProps) => {
   const textEls = text.split("").map((char, i) => {
     return <TitleLetter key={i} char={char} highlight={false} />;
   });
-  return <div>{textEls}</div>;
+  return (
+    <div
+      className={typeOfSubtitle === "name" ? classes.name : classes.subtitle}
+    >
+      {textEls}
+    </div>
+  );
 };
 
 export default Subtitle;

@@ -3,8 +3,8 @@ interface TitleLetterProps {
   highlight: boolean;
 }
 
-const TitleLetter = ({ char }: TitleLetterProps) => {
-  return <span>{char}</span>;
+const TitleLetter = ({ char, highlight }: TitleLetterProps) => {
+  return <span className={highlight ? "highlight" : ""}>{char}</span>;
 };
 
 export default TitleLetter;

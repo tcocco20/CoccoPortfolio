@@ -20,3 +20,45 @@
     0 0 40px var(--col1), 0 0 60px var(--col1);
   filter: brightness(1.5);
 }
+
+.name {
+  opacity: 0;
+  color: var(--col3sa);
+  font-size: 5vw;
+  animation-name: slideDown;
+  animation-duration: 1s;
+  animation-delay: 1.5s;
+  animation-fill-mode: forwards;
+}
+
+.subtitle {
+  opacity: 0;
+  color: var(--col3sa);
+  font-size: 3.5vw;
+  animation-name: slideUp;
+  animation-duration: 1s;
+  animation-delay: 2s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20vh);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20vh);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

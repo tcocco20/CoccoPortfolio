@@ -1,11 +1,30 @@
+import useAppStore from "../store/appStore";
+import { useEffect, useRef, useState } from "react";
+
 interface TitleLetterProps {
   char: string;
-  highlight: boolean;
 }
 
-const TitleLetter = ({ char, highlight }: TitleLetterProps) => {
+const TitleLetter = ({ char }: TitleLetterProps) => {
+  const [highlight, setHighlight] = useState(false);
+  const addLetter = useAppStore((state) => state.addLetter);
+  const letterRef = useRef<HTMLSpanElement>(null);
+
+  const setHighlightHandler = (trigger: boolean) => {
+    setHighlight(trigger);
+  };
+
+  useEffect(() => {
+    addLetter({
+      ref: letterRef,
+      setHighlightHandler,
+    });
+  }, [addLetter]);
+
   return (
-    <span className={highlight ? "letter highlight" : "letter"}>{char}</span>
+    <span ref={letterRef} className={highlight ? "highlight" : ""}>
+      {char}
+    </span>
   );
 };
 

@@ -8,7 +8,7 @@ interface SubtitleProps {
 
 const Subtitle = ({ text, typeOfSubtitle }: SubtitleProps) => {
   const textEls = text.split("").map((char, i) => {
-    return <TitleLetter key={i} char={char} highlight={false} />;
+    return <TitleLetter key={i} char={char} />;
   });
   return (
     <div

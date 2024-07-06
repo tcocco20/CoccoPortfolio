@@ -1,13 +1,16 @@
 // import { Parallax, ParallaxLayer } from "@react-spring/parallax";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import StarLayer from "./components/StarLayer";
 import Title from "./components/Title";
 import useAppStore from "./store/appStore";
 import Utils from "./utils";
+import TestShootingStar from "./components/TestShootingStar";
 
 function App() {
   const letters = useAppStore((state) => state.letters);
   const stars = useAppStore((state) => state.stars);
+  const [shootingStar, setShootingStar] = useState(false);
+
   useEffect(() => {
     if (letters.length > 0) {
       window.addEventListener("mousemove", (e) => {
@@ -39,12 +42,17 @@ function App() {
       });
     }
   }, [letters, stars]);
+
+  useEffect(() => {
+    // Shooting star effect
+  }, []);
   return (
     <div className="bg-black h-screen w-screen">
       <Title />
       <StarLayer position="front" />
       <StarLayer position="middle" />
       <StarLayer position="back" />
+      {shootingStar && <TestShootingStar />}
     </div>
   );
 }

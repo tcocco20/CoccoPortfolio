@@ -1,4 +1,4 @@
-import classes from "./ShootingStar.module.css";
+import classes from "./star.module.css";
 
 const ShootingStar = () => {
   return <div className={`${classes.star} ${classes.shooting}`} />;

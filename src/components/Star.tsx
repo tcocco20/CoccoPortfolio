@@ -27,22 +27,6 @@ const Star = ({ size }: StarProps) => {
   const star = useRef<HTMLDivElement>(null);
   const addStar = useAppStore((state) => state.addStar);
 
-  const handleHighlight = (trigger: boolean) => {
-    if (trigger) {
-      if (!highlight) {
-        setScale(1);
-        setHighlight(true);
-        setStarSize(largeSize);
-      }
-    } else {
-      setTransition(true);
-      setHighlight(false);
-      setStarSize(smallSize);
-
-      setTimeout(() => setTransition(false), 1000);
-    }
-  };
-
   const flicker = useCallback(() => {
     if (!highlight) {
       if (Utils.Rand.num() > 0.5) {
@@ -57,7 +41,7 @@ const Star = ({ size }: StarProps) => {
     if (size === "medium") sSize += 1.5;
     if (size === "large") {
       sSize += 3;
-      addStar({ ref: star, setHighlight: handleHighlight });
+      addStar({ ref: star, setHighlight });
     }
     setSmallSize(sSize);
     setLargeSize(5 + 0.58 * sSize);
@@ -73,6 +57,18 @@ const Star = ({ size }: StarProps) => {
     const timer = setInterval(flicker, Utils.Rand.between(700, 500));
     return () => clearInterval(timer);
   }, [flicker]);
+
+  useEffect(() => {
+    if (highlight) {
+      setScale(1);
+      setStarSize(largeSize);
+    } else {
+      setTransition(true);
+      setStarSize(smallSize);
+
+      setTimeout(() => setTransition(false), 1000);
+    }
+  }, [highlight, largeSize, smallSize]);
 
   const starInitialStyle = {
     top,

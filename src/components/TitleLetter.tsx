@@ -10,14 +10,10 @@ const TitleLetter = ({ char }: TitleLetterProps) => {
   const addLetter = useAppStore((state) => state.addLetter);
   const letterRef = useRef<HTMLSpanElement>(null);
 
-  const setHighlightHandler = (trigger: boolean) => {
-    setHighlight(trigger);
-  };
-
   useEffect(() => {
     addLetter({
       ref: letterRef,
-      setHighlightHandler,
+      setHighlight,
     });
   }, [addLetter]);
 

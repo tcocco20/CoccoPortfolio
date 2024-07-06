@@ -7,7 +7,7 @@
   transition: opacity 1s ease-in, transform 0.7s ease-in-out;
 }
 
-.star.shooting {
+.shooting {
   transition: none;
   height: 8px;
   width: 8px;
@@ -16,7 +16,7 @@
   background-color: #f6f0fe;
 }
 
-.star.shooting::before {
+.shooting::before {
   content: "";
   height: 8px;
   width: 100px;
@@ -27,37 +27,37 @@
   background-image: linear-gradient(to right, #0000, #f6f0fe);
 }
 
-.star.falling1 {
+.falling1 {
   top: calc(200vh - 50px) !important;
   opacity: 0 !important;
   transition: all 2s ease, opacity 4s ease !important;
 }
 
-.star.falling2 {
+.falling2 {
   top: calc(200vh - 50px) !important;
   opacity: 0 !important;
   transition: all 2.5s ease, opacity 4.5s ease !important;
 }
 
-.star.falling3 {
+.falling3 {
   top: calc(200vh - 50px) !important;
   opacity: 0 !important;
   transition: all 3s ease, opacity 5s ease !important;
 }
 
-.star.falling4 {
+.falling4 {
   top: calc(200vh - 50px) !important;
   opacity: 0 !important;
   transition: all 3.5s ease, opacity 5.5s ease !important;
 }
 
-.star.falling5 {
+.falling5 {
   top: calc(200vh - 50px) !important;
   opacity: 0 !important;
   transition: all 4s ease, opacity 6s ease !important;
 }
 
-.star.highlight {
+.highlight {
   opacity: 1;
   filter: brightness(2);
   text-shadow: 0 0 5px var(--col1s), 0 0 10px var(--col2s),
@@ -66,7 +66,7 @@
     0 0 40px var(--col1), 0 0 40px var(--col1), 0 0 60px var(--col1);
 }
 
-.star.trans {
+.trans {
   transition: all 1s ease !important;
 }
 

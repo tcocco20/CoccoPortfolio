@@ -1,34 +1,19 @@
 import {
-  forwardRef,
-  RefObject,
   useCallback,
   useEffect,
-  useImperativeHandle,
   useRef,
   useState,
   type CSSProperties,
 } from "react";
 import Utils from "../utils";
 import classes from "./star.module.css";
+import useAppStore from "../store/appStore";
 
-interface LargeStarProps {
-  size: "large";
-}
-
-interface SmallerStarProps {
-  size: "small" | "medium";
-}
-
-export interface StarInterface {
-  highlight: (trigger: boolean) => void;
-  innerRef: RefObject<HTMLDivElement>;
-}
-
-type StarProps = LargeStarProps | SmallerStarProps;
+type StarProps = { size: "small" | "medium" | "large" };
 
 const colors = ["#F6F0FE", "#DFABCA", "#E9C1D4"];
 
-const Star = forwardRef<StarInterface, StarProps>(({ size }, ref) => {
+const Star = ({ size }: StarProps) => {
   const [scale, setScale] = useState(1);
   const [highlight, setHighlight] = useState(false);
   const [smallSize, setSmallSize] = useState(0);
@@ -40,27 +25,23 @@ const Star = forwardRef<StarInterface, StarProps>(({ size }, ref) => {
   const [left, setLeft] = useState("");
   const color = useRef<string>(Utils.Rand.choice(colors));
   const star = useRef<HTMLDivElement>(null);
+  const addStar = useAppStore((state) => state.addStar);
 
-  useImperativeHandle(ref, () => {
-    return {
-      highlight(trigger) {
-        if (trigger) {
-          if (!highlight) {
-            setScale(1);
-            setHighlight(true);
-            setStarSize(largeSize);
-          }
-        } else {
-          setTransition(true);
-          setHighlight(false);
-          setStarSize(smallSize);
+  const handleHighlight = (trigger: boolean) => {
+    if (trigger) {
+      if (!highlight) {
+        setScale(1);
+        setHighlight(true);
+        setStarSize(largeSize);
+      }
+    } else {
+      setTransition(true);
+      setHighlight(false);
+      setStarSize(smallSize);
 
-          setTimeout(() => setTransition(false), 1000);
-        }
-      },
-      innerRef: star,
-    };
-  });
+      setTimeout(() => setTransition(false), 1000);
+    }
+  };
 
   const flicker = useCallback(() => {
     if (!highlight) {
@@ -74,7 +55,10 @@ const Star = forwardRef<StarInterface, StarProps>(({ size }, ref) => {
   useEffect(() => {
     let sSize = Utils.Rand.between(3, 1);
     if (size === "medium") sSize += 1.5;
-    if (size === "large") sSize += 3;
+    if (size === "large") {
+      sSize += 3;
+      addStar({ ref: star, setHighlight: handleHighlight });
+    }
     setSmallSize(sSize);
     setLargeSize(5 + 0.58 * sSize);
     setStarSize(sSize);
@@ -83,7 +67,7 @@ const Star = forwardRef<StarInterface, StarProps>(({ size }, ref) => {
     setLeft(Utils.Rand.between(101, 0, true) + "%");
 
     setAppear(true);
-  }, [size]);
+  }, [addStar, size]);
 
   useEffect(() => {
     const timer = setInterval(flicker, Utils.Rand.between(700, 500));
@@ -109,6 +93,6 @@ const Star = forwardRef<StarInterface, StarProps>(({ size }, ref) => {
       }${appear ? " " + classes.appear : ""}`}
     />
   );
-});
+};
 
 export default Star;

@@ -1,28 +1,30 @@
-import { StarInterface } from "../components/Star";
 import { RefObject } from "react";
 import { create } from "zustand";
 
-// interface StarRef {} Will update to this if letter implementation succeeds
+interface StarRef {
+  ref: RefObject<HTMLDivElement>;
+  setHighlight: (newValue: boolean) => void;
+}
 
 interface LetterRef {
   ref: RefObject<HTMLSpanElement>;
-  setHighlightHandler: (newValue: boolean) => void;
+  setHighlight: (newValue: boolean) => void;
 }
 
 interface appState {
-  starRefs: RefObject<StarInterface>[];
-  addStar: (star: RefObject<StarInterface>) => void;
+  stars: StarRef[];
+  addStar: (star: StarRef) => void;
   letters: LetterRef[];
   addLetter: (letter: LetterRef) => void;
 }
 
 const useAppStore = create<appState>()((set, get) => ({
-  starRefs: [],
+  stars: [],
   addStar: (star) =>
     set(() => {
-      const currentStars = get().starRefs;
+      const currentStars = get().stars;
       currentStars.push(star);
-      return { starRefs: currentStars };
+      return { stars: currentStars };
     }),
   letters: [],
   addLetter: (letter) =>

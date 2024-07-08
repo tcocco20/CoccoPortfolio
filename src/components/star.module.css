@@ -71,7 +71,7 @@
 }
 
 .appear {
-  animation: appear 1s ease-in forwards;
+  animation: appear 2s ease-in forwards;
 }
 
 @keyframes appear {
@@ -79,6 +79,6 @@
     opacity: 0;
   }
   100% {
-    opacity: 0.4;
+    opacity: 0.5;
   }
 }

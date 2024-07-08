@@ -1,15 +1,19 @@
 // import { Parallax, ParallaxLayer } from "@react-spring/parallax";
-import { useEffect, useState } from "react";
+import { type ReactElement, useEffect, useState } from "react";
 import StarLayer from "./components/StarLayer";
 import Title from "./components/Title";
 import useAppStore from "./store/appStore";
 import Utils from "./utils";
-import TestShootingStar from "./components/TestShootingStar";
 
 function App() {
   const letters = useAppStore((state) => state.letters);
   const stars = useAppStore((state) => state.stars);
-  const [shootingStar, setShootingStar] = useState(false);
+  const [shootingStar, setShootingStar] = useState<ReactElement>();
+  const [shootingStarX, setShootingStarX] = useState(0);
+
+  const shootStar = () => {
+    // May need two functions to handle the shooting star
+  };
 
   useEffect(() => {
     if (letters.length > 0) {
@@ -43,16 +47,14 @@ function App() {
     }
   }, [letters, stars]);
 
-  useEffect(() => {
-    // Shooting star effect
-  }, []);
+  useEffect(() => {}, []);
   return (
     <div className="bg-black h-screen w-screen">
       <Title />
       <StarLayer position="front" />
       <StarLayer position="middle" />
       <StarLayer position="back" />
-      {shootingStar && <TestShootingStar />}
+      {/* {shootingStar && <TestShootingStar />} */}
     </div>
   );
 }

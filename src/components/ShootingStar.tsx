@@ -8,9 +8,13 @@ const ShootingStar = ({ xPos }: { xPos: number }) => {
   const [scale, setScale] = useState(1);
 
   useEffect(() => {
+    console.log("ShootingStar useEffect");
     setStartingRotation(Utils.Rand.between(360));
     setRotation(Utils.Rand.between(30, -30));
     setScale(Utils.Rand.between(1.3, 0.5));
+    return () => {
+      console.log("ShootingStar cleanup");
+    };
   }, []);
 
   return (

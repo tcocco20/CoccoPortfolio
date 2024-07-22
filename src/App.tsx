@@ -1,9 +1,10 @@
 // import { Parallax, ParallaxLayer } from "@react-spring/parallax";
-import { type ReactElement, useEffect, useState } from "react";
+import { type ReactElement, useCallback, useEffect, useState } from "react";
 import StarLayer from "./components/StarLayer";
 import Title from "./components/Title";
 import useAppStore from "./store/appStore";
 import Utils from "./utils";
+import ShootingStar from "./components/ShootingStar";
 
 function App() {
   const letters = useAppStore((state) => state.letters);
@@ -11,9 +12,22 @@ function App() {
   const [shootingStar, setShootingStar] = useState<ReactElement>();
   const [shootingStarX, setShootingStarX] = useState(0);
 
-  const shootStar = () => {
-    // May need two functions to handle the shooting star
-  };
+  const moveShootingStar = useCallback(() => {
+    const moveStarTimer = setInterval(() => {
+      setShootingStarX((prev) => ++prev);
+      if (shootingStarX > 120) {
+        setShootingStarX(0);
+        setShootingStar(undefined);
+        clearInterval(moveStarTimer);
+      }
+    }, 1000 / 60);
+  }, [shootingStarX]);
+
+  const createShootingStar = useCallback(() => {
+    if (Utils.Rand.num() < 0.6 || !document.hasFocus() || shootingStar) return;
+    setShootingStar(<ShootingStar xPos={shootingStarX} />);
+    moveShootingStar();
+  }, [shootingStar, shootingStarX, moveShootingStar]);
 
   useEffect(() => {
     if (letters.length > 0) {
@@ -45,7 +59,16 @@ function App() {
         });
       });
     }
-  }, [letters, stars]);
+
+    const shootingStarInterval = setInterval(() => {
+      console.log("createShootingStar if rand num is higher than 0.6");
+      createShootingStar();
+    }, 2000);
+
+    return () => {
+      if (shootingStarInterval) clearInterval(shootingStarInterval);
+    };
+  }, [letters, stars, createShootingStar]);
 
   useEffect(() => {}, []);
   return (
@@ -54,7 +77,7 @@ function App() {
       <StarLayer position="front" />
       <StarLayer position="middle" />
       <StarLayer position="back" />
-      {/* {shootingStar && <TestShootingStar />} */}
+      {shootingStar && <ShootingStar xPos={shootingStarX} />}
     </div>
   );
 }

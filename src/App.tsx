@@ -1,5 +1,5 @@
 // import { Parallax, ParallaxLayer } from "@react-spring/parallax";
-import { type ReactElement, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import StarLayer from "./components/StarLayer";
 import Title from "./components/Title";
 import useAppStore from "./store/appStore";
@@ -9,25 +9,28 @@ import ShootingStar from "./components/ShootingStar";
 function App() {
   const letters = useAppStore((state) => state.letters);
   const stars = useAppStore((state) => state.stars);
-  const [shootingStar, setShootingStar] = useState<ReactElement>();
+  const [shootingStar, setShootingStar] = useState(false);
+  const [shootingStarTimer, setShootingStarTimer] = useState<number>();
   const [shootingStarX, setShootingStarX] = useState(0);
 
   const moveShootingStar = useCallback(() => {
-    const moveStarTimer = setInterval(() => {
-      setShootingStarX((prev) => ++prev);
-      if (shootingStarX > 120) {
-        setShootingStarX(0);
-        setShootingStar(undefined);
-        clearInterval(moveStarTimer);
-      }
-    }, 1000 / 60);
-  }, [shootingStarX]);
+    setShootingStarX((prev) => ++prev);
+    if (shootingStarX > 120) {
+      setShootingStarX(0);
+      setShootingStar(false);
+      clearInterval(shootingStarTimer);
+    }
+  }, [shootingStarX, shootingStarTimer]);
 
   const createShootingStar = useCallback(() => {
     if (Utils.Rand.num() < 0.6 || !document.hasFocus() || shootingStar) return;
-    setShootingStar(<ShootingStar xPos={shootingStarX} />);
-    moveShootingStar();
-  }, [shootingStar, shootingStarX, moveShootingStar]);
+    setShootingStar(true);
+    setShootingStarTimer(
+      setInterval(() => {
+        moveShootingStar();
+      }, 1000 / 60)
+    );
+  }, [shootingStar, moveShootingStar]);
 
   useEffect(() => {
     if (letters.length > 0) {
@@ -59,18 +62,18 @@ function App() {
         });
       });
     }
+  }, [letters, stars]);
 
+  useEffect(() => {
     const shootingStarInterval = setInterval(() => {
       console.log("createShootingStar if rand num is higher than 0.6");
       createShootingStar();
     }, 2000);
 
     return () => {
-      if (shootingStarInterval) clearInterval(shootingStarInterval);
+      clearInterval(shootingStarInterval);
     };
-  }, [letters, stars, createShootingStar]);
-
-  useEffect(() => {}, []);
+  }, []);
   return (
     <div className="bg-black h-screen w-screen">
       <Title />

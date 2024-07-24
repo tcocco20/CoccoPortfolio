@@ -15,20 +15,24 @@ function App() {
 
   const moveShootingStar = useCallback(() => {
     setShootingStarX((prev) => ++prev);
-    if (shootingStarX > 120) {
-      setShootingStarX(0);
-      setShootingStar(false);
-      clearInterval(shootingStarTimer);
-    }
-  }, [shootingStarX, shootingStarTimer]);
+  }, []);
+
+  const clearShootingStar = () => {
+    setShootingStarX(0);
+    setShootingStar(false);
+    clearInterval(shootingStarTimer);
+  };
 
   const createShootingStar = useCallback(() => {
+    console.log("createShootingStar called");
+    console.log("shootingStar: ", shootingStar);
     if (Utils.Rand.num() < 0.6 || !document.hasFocus() || shootingStar) return;
+    console.log("shooting star created");
     setShootingStar(true);
     setShootingStarTimer(
       setInterval(() => {
         moveShootingStar();
-      }, 1000 / 60)
+      }, 500)
     );
   }, [shootingStar, moveShootingStar]);
 

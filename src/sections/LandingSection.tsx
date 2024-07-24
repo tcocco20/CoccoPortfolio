@@ -1,4 +1,4 @@
-import { MouseEventHandler, useCallback, useEffect, useState } from "react";
+import { type MouseEvent, useCallback, useEffect, useState } from "react";
 import ShootingStar from "../components/ShootingStar";
 import StarLayer from "../components/StarLayer";
 import Title from "../components/Title";
@@ -23,9 +23,7 @@ const LandingSection = () => {
   }, [shootingStarTimer]);
 
   const createShootingStar = useCallback(() => {
-    console.log("createShootingStar called");
     if (Utils.Rand.num() < 0.6 || !document.hasFocus() || shootingStar) return;
-    console.log("shooting star created");
     setShootingStar(true);
     setShootingStarTimer(
       setInterval(() => {
@@ -34,68 +32,72 @@ const LandingSection = () => {
     );
   }, [shootingStar, moveShootingStar]);
 
-  const mouseMoveHandler = (e: MouseEventHandler<HTMLDivElement>) => {
-    // if (letters.length > 0) {
-    letters.forEach((letter) => {
-      if (letter.ref.current !== null) {
-        if (
-          Utils.calcDistance(letter.ref.current, e) <
-          window.innerWidth / 18
-        ) {
-          letter.setHighlight(true);
-        } else {
-          letter.setHighlight(false);
-        }
-      }
-    });
-
-    stars.forEach((star) => {
-      if (star.ref.current !== null) {
-        if (Utils.calcDistance(star.ref.current, e) < window.innerWidth / 18) {
-          star.setHighlight(true);
-        } else {
-          star.setHighlight(false);
-        }
-      }
-    });
-    // }
-  };
-
-  useEffect(() => {
+  function mouseMoveHandler(event: MouseEvent<HTMLDivElement>) {
     if (letters.length > 0) {
-      window.addEventListener("mousemove", (e) => {
-        letters.forEach((letter) => {
-          if (letter.ref.current !== null) {
-            if (
-              Utils.calcDistance(letter.ref.current, e) <
-              window.innerWidth / 18
-            ) {
-              letter.setHighlight(true);
-            } else {
-              letter.setHighlight(false);
-            }
+      letters.forEach((letter) => {
+        if (letter.ref.current !== null) {
+          if (
+            Utils.calcDistance(letter.ref.current, event) <
+            window.innerWidth / 18
+          ) {
+            letter.setHighlight(true);
+          } else {
+            letter.setHighlight(false);
           }
-        });
-
-        stars.forEach((star) => {
-          if (star.ref.current !== null) {
-            if (
-              Utils.calcDistance(star.ref.current, e) <
-              window.innerWidth / 18
-            ) {
-              star.setHighlight(true);
-            } else {
-              star.setHighlight(false);
-            }
-          }
-        });
+        }
       });
     }
-  }, [letters, stars]);
+
+    if (stars.length > 0) {
+      stars.forEach((star) => {
+        if (star.ref.current !== null) {
+          if (
+            Utils.calcDistance(star.ref.current, event) <
+            window.innerWidth / 18
+          ) {
+            star.setHighlight(true);
+          } else {
+            star.setHighlight(false);
+          }
+        }
+      });
+    }
+  }
+
+  //   useEffect(() => {
+  //     if (letters.length > 0) {
+  //       window.addEventListener("mousemove", (e) => {
+  //         letters.forEach((letter) => {
+  //           if (letter.ref.current !== null) {
+  //             if (
+  //               Utils.calcDistance(letter.ref.current, e) <
+  //               window.innerWidth / 18
+  //             ) {
+  //               letter.setHighlight(true);
+  //             } else {
+  //               letter.setHighlight(false);
+  //             }
+  //           }
+  //         });
+
+  //         stars.forEach((star) => {
+  //           if (star.ref.current !== null) {
+  //             if (
+  //               Utils.calcDistance(star.ref.current, e) <
+  //               window.innerWidth / 18
+  //             ) {
+  //               star.setHighlight(true);
+  //             } else {
+  //               star.setHighlight(false);
+  //             }
+  //           }
+  //         });
+  //       });
+  //     }
+  //   }, [letters, stars]);
 
   useEffect(() => {
     const shootingStarInterval = setInterval(() => {
-      console.log("createShootingStar if rand num is higher than 0.6");
       createShootingStar();
     }, 2000);
 
@@ -105,7 +107,6 @@ const LandingSection = () => {
   }, [createShootingStar]);
 
   useEffect(() => {
-    console.log("shootingStarX use effect. current val: ", shootingStarX);
     if (shootingStarX >= 100) {
       clearShootingStar();
     }

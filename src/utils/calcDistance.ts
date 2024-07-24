@@ -1,6 +1,8 @@
+import { type MouseEvent } from "react";
+
 export const calcDistance = (
   element: HTMLSpanElement | HTMLDivElement,
-  event: MouseEvent
+  event: MouseEvent<HTMLDivElement>
 ): number => {
   if (!event) {
     throw new Error("Event object must be provided");

@@ -1,12 +1,11 @@
-// import { Parallax, ParallaxLayer } from "@react-spring/parallax";
-import { useCallback, useEffect, useState } from "react";
-import StarLayer from "./components/StarLayer";
-import Title from "./components/Title";
-import useAppStore from "./store/appStore";
-import Utils from "./utils";
-import ShootingStar from "./components/ShootingStar";
+import { MouseEventHandler, useCallback, useEffect, useState } from "react";
+import ShootingStar from "../components/ShootingStar";
+import StarLayer from "../components/StarLayer";
+import Title from "../components/Title";
+import useAppStore from "../store/appStore";
+import Utils from "../utils";
 
-function App() {
+const LandingSection = () => {
   const letters = useAppStore((state) => state.letters);
   const stars = useAppStore((state) => state.stars);
   const [shootingStar, setShootingStar] = useState(false);
@@ -34,6 +33,33 @@ function App() {
       }, 1000 / 60)
     );
   }, [shootingStar, moveShootingStar]);
+
+  const mouseMoveHandler = (e: MouseEventHandler<HTMLDivElement>) => {
+    // if (letters.length > 0) {
+    letters.forEach((letter) => {
+      if (letter.ref.current !== null) {
+        if (
+          Utils.calcDistance(letter.ref.current, e) <
+          window.innerWidth / 18
+        ) {
+          letter.setHighlight(true);
+        } else {
+          letter.setHighlight(false);
+        }
+      }
+    });
+
+    stars.forEach((star) => {
+      if (star.ref.current !== null) {
+        if (Utils.calcDistance(star.ref.current, e) < window.innerWidth / 18) {
+          star.setHighlight(true);
+        } else {
+          star.setHighlight(false);
+        }
+      }
+    });
+    // }
+  };
 
   useEffect(() => {
     if (letters.length > 0) {
@@ -85,7 +111,7 @@ function App() {
     }
   }, [shootingStarX, clearShootingStar]);
   return (
-    <div className="bg-black h-screen w-screen">
+    <div className="bg-black h-screen w-screen" onMouseMove={mouseMoveHandler}>
       <Title />
       <StarLayer position="front" />
       <StarLayer position="middle" />
@@ -93,6 +119,6 @@ function App() {
       {shootingStar && <ShootingStar xPos={shootingStarX} />}
     </div>
   );
-}
+};
 
-export default App;
+export default LandingSection;
